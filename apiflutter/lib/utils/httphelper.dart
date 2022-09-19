@@ -11,22 +11,20 @@ class HttpHelper {
       host: 'api.adviceslip.com',
       path: 'advice',
     );
+    print(uri);
 
     http.Response response = await http.get(uri);
 
     if (response.statusCode == HttpStatus.ok) {
       final json = jsonDecode(response.body);
-      final conselhoAlt = json['advice'];
+      final conselhosMap = json['slip'] as List;
 
-      // List<Filme> filmes =
-      //     filmesMap.map((data) => Filme.fromJson(data)).toList();
+      Map<dynamic ,List<Conselho>> conselhos =
+          conselhosMap.map((data) => Conselho.fromJson(data)) as Map<dynamic, List<Conselho>>;
 
-      //  return filmes;
-      print(conselhoAlt);
-      return conselhoAlt;
+      return conselhos;
     } else {
-      print("retornou vazio");
-      return '';
+      return [];
     }
   }
 /*
@@ -130,4 +128,5 @@ class HttpHelper {
     }
   }
 */
+
 }

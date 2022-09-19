@@ -30,24 +30,24 @@ class ConselhosMenu extends StatefulWidget {
 }
 
 class _ConselhosMenuState extends State<ConselhosMenu> {
-  
   DbHelper dbhelper = DbHelper();
   HttpHelper httpHelper = HttpHelper();
-  List<ConselhoModel> listas = [];
+  List<Conselho> listas = [];
 
   @override
   void initState() {
-   
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    String conselhoRecuperado = '';
     // TODO: implement build
-    print("passou");
+    // print("passou");
     dbhelper.testDb();
-    print("antes do http");
+    //print("antes do http");
     httpHelper.getConselho();
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -79,12 +79,10 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
                 child: Text('Classificação'),
               ),
             ),
+            ElevatedButton(onPressed: () {}, child: Text(conselhoRecuperado))
           ],
         ),
       ),
-      
     );
   }
 }
-
-

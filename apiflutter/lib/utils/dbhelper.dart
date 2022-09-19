@@ -18,9 +18,9 @@ class DbHelper {
 
   Future<Database?> openDb() async {
     if (db == null) {
-      db =
-          await openDatabase(join(await getDatabasesPath(), 'conselhos_milenares.db'),
-              onCreate: (database, version) {
+      db = await openDatabase(
+          join(await getDatabasesPath(), 'conselhos_milenares.db'),
+          onCreate: (database, version) {
         database.execute('''
             CREATE TABLE conselho (
               id INTEGER PRIMARY KEY,
@@ -53,7 +53,7 @@ class DbHelper {
       'id': 0,
       'classificacao': 0,
       'texto': 'teste do banco',
-      'data' : '10/10/2000',
+      'data': '10/10/2000',
       'comentario': 'comentario qualquer'
     });
 
@@ -66,7 +66,7 @@ class DbHelper {
     print(conselho.first.toString());
   }
 
-    Future<int> insertClassificacao(ClassificacaoModel classificacao) async {
+  Future<int> insertClassificacao(ClassificacaoModel classificacao) async {
     // conflictAlgorithm especifica como o banco deve tratar quando inserimos dados com id duplicados
     // Nesse caso, se a mesma lista for inserida várias vezes, ela substituirá os dados anterior
     int id = await this.db!.insert('classificacao', classificacao.toMap(),
@@ -74,7 +74,7 @@ class DbHelper {
     return id;
   }
 
-  Future<int> insertConselho(ConselhoModel conselho) async {
+  Future<int> insertConselho(Conselho conselho) async {
     int id = await this.db!.insert(
           'conselho',
           conselho.toMap(),
@@ -84,43 +84,45 @@ class DbHelper {
   }
 
   Future<List<ClassificacaoModel>> getClassificacoes() async {
-    final List<Map<String, dynamic>> mapClassificacoes = await this.db!.query('classificacao');
+    final List<Map<String, dynamic>> mapClassificacoes =
+        await this.db!.rawQuery('SELECT * FROM classificacao');
 
     return List.generate(mapClassificacoes.length, (index) {
       return ClassificacaoModel(
-        id: mapClassificacoes[index]['id'],
-        descricao: mapClassificacoes[index]['descricao']
-      );
+          id: mapClassificacoes[index]['id'],
+          descricao: mapClassificacoes[index]['descricao']);
     });
   }
 
-  Future<List<ConselhoModel>> getConselhos(int classificacao) async {
+  Future<List<Conselho>> getConselhos(int classificacao) async {
     final List<Map<String, dynamic>> mapConselhos = await this
         .db!
         .query('itens', where: 'classificacao = ?', whereArgs: [classificacao]);
 
     return List.generate(mapConselhos.length, (index) {
-      return ConselhoModel(
-        id: mapConselhos[index]['id'],
-        classificacao: mapConselhos[index]['classificacao'],
-        data: mapConselhos[index]['data'],
-        comentario: mapConselhos[index]['comentario'],
-        conselho: mapConselhos[index]['conselho']
-      );
+      return Conselho(
+          id: mapConselhos[index]['id'],
+          classificacao: mapConselhos[index]['classificacao'],
+          data: mapConselhos[index]['data'],
+          comentario: mapConselhos[index]['comentario'],
+          conselho: mapConselhos[index]['conselho']);
     });
   }
 
-  Future<int> deleteList(ConselhoModel conselho) async{
+  Future<int> deleteList(Conselho conselho) async {
     //arrumar para ele colocar branco onde houver essa classificaco
     //int result = await this.db!.delete('itens', where: 'id_lista = ?', whereArgs: [conselho.id]);
-    int result = await this.db!.delete('conselho',where: 'id = ?', whereArgs: [conselho.id]);
+    int result = await this
+        .db!
+        .delete('conselho', where: 'id = ?', whereArgs: [conselho.id]);
 
     return result;
   }
 
-  Future<int> deleteItem(ConselhoModel conselho) async{
-    int result = await this.db!.delete('conselho', where: 'id = ?', whereArgs: [conselho.id]);
+  Future<int> deleteItem(Conselho conselho) async {
+    int result = await this
+        .db!
+        .delete('conselho', where: 'id = ?', whereArgs: [conselho.id]);
     return result;
   }
 }
-

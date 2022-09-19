@@ -2,6 +2,8 @@ import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:apiflutter/screens/viewConselho.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/httphelper.dart';
+
 class ListaConselhos extends StatefulWidget {
   @override
   State<ListaConselhos> createState() => _ListaConselhosState();
@@ -9,30 +11,26 @@ class ListaConselhos extends StatefulWidget {
 
 class _ListaConselhosState extends State<ListaConselhos> {
   late String result;
-  //late HttpHelper helper;
+  late HttpHelper httphelper;
 
-  int filmesCount = 0;
-  List<ConselhoModel> conselhos = [];
-
-  final String defaultPathImage = 'https://image.tmdb.org/t/p/w92/';
-  final String defaultPoster =
-      'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
+  int conselhosCount = 0;
+  List<Conselho> conselhos = [];
 
   Icon iconeSearchBar = Icon(Icons.search);
   Widget searchBar = Text('Conselhos');
 
   @override
   void initState() {
-    //helper = new HttpHelper();
+    httphelper = new HttpHelper();
     initialize();
     super.initState();
     // result = '';
   }
 
   Future initialize() async {
-    //conselhos = await helper.getLancamentos();
+    conselhos = await httphelper.getConselho();
     setState(() {
-      filmesCount = conselhos.length;
+      conselhosCount = conselhos.length;
       conselhos = conselhos;
     });
   }
@@ -70,7 +68,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
         ),
         body: Container(
             child: ListView.builder(
-                itemCount: (this.filmesCount == null) ? 0 : this.filmesCount,
+                itemCount: (this.conselhosCount == null) ? 0 : this.conselhosCount,
                 itemBuilder: ((BuildContext context, int index) {
                   //       if (conselhos[index].posterPath != null) {
                   //image =

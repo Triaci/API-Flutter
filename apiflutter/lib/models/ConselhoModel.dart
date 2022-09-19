@@ -1,16 +1,21 @@
-class ConselhoModel {
-  int id;
-  int classificacao;
-  String conselho;
-  DateTime data;
-  String comentario;
+class Conselho {
+  late int id;
+  late int classificacao;
+  late String conselho;
+  late DateTime data;
+  late String comentario;
 
-  ConselhoModel(
-      {required this.id,
-      required this.classificacao,
-      required this.conselho,
-      required this.data,
-      required this.comentario});
+  Conselho(
+      { required this.id,
+       required this.classificacao,
+       required this.conselho,
+       required this.data,
+       required this.comentario});
+
+  Conselho.fromJson(Map<dynamic, dynamic> json) {
+    this.id = json['id'];
+    this.conselho = json['advice'];
+  }
 
   Map<String, dynamic> toMap() {
     return {
