@@ -23,7 +23,7 @@ class DbHelper {
           onCreate: (database, version) {
         database.execute('''
             CREATE TABLE conselho (
-              id INTEGER PRIMARY KEY,
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
               classificacao INTEGER,
               texto TEXT,
               data DATE,
@@ -32,7 +32,7 @@ class DbHelper {
           ''');
         database.execute('''
             CREATE TABLE classificacao (
-              id INTEGER PRIMARY KEY,
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
               descricao TEXT
             )
           ''');
@@ -48,14 +48,32 @@ class DbHelper {
   // verificar se podemos fazer a inserção com o inser e com o sql padrão
   Future testDb() async {
     db = await openDb();
-    db!.execute("INSERT INTO classificacao VALUES (0 ,'Conselhos Bons')");
+    // db!.execute("INSERT INTO classificacao VALUES (0, 'Conselhos Bons')");
+
+
+
+
+
+
+
+    /* 
+      a cada execução do seu applicativo, o código acima tentava inserir um classificação com id 0, isso não é possivel
+      pois, não pode-se repetir chave primaria no banco durante a inserção
+      o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
+      de inseri-las novamente
+    */
+     db!.insert('classificacao', {
+      'id': 1,
+      'descricao': "Conselhos bons"
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+
     db!.insert('conselho', {
-      'id': 0,
-      'classificacao': 0,
+      'id': null,
+      'classificacao': 1,
       'texto': 'teste do banco',
       'data': '10/10/2000',
       'comentario': 'comentario qualquer'
-    });
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
 
     List classificacao = await db!.rawQuery('SELECT * FROM classificacao');
     // List items = await db.

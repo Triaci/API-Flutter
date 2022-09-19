@@ -47,7 +47,7 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
     dbhelper.testDb();
     //print("antes do http");
     httpHelper.getConselho();
-    
+    // print("depois do http");
 
     return Scaffold(
       appBar: AppBar(
