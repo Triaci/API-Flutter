@@ -16,7 +16,7 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
   late DbHelper dbhelper = DbHelper();
   late ClassificacaoDialog dialog;
 
-  List<ClassificacaoModel> classificacoes = [];
+  List<Classificacao> classificacoes = [];
 
   //final String defaultPathImage = 'https://image.tmdb.org/t/p/w92/';
   //final String defaultPoster =
@@ -99,33 +99,43 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
                 return Dismissible(
                   key: Key(classificacoes[index].id.toString()),
                   onDismissed: (direction) async {
-                        if (direction == DismissDirection.endToStart) {}
-                        return await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: const Text(
-                                    'Deseja realmente remover esta classificacao?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                      child: const Text('Sim'),
-                                      onPressed: () async {
-                                        //String status = await dbhelper
-                                        //    .removerFavoritos(filmes[index].id);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text("teste")));
-                                        Navigator.of(context).pop(true);
-                                      }),
-                                  TextButton(
-                                    child: const Text('Não'),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                  ),
-                                ],
-                              );
-                            });
-                      },
+                    //carregaLista();
+                    if (direction == DismissDirection.endToStart) {
+                      await dbhelper.removerClassificao(classificacoes[index]);
+                    }
+                    if (direction == DismissDirection.startToEnd) {
+                      print("Start to End");
+                    }
+                  }
+                  /*return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: const Text(
+                                'Deseja realmente remover esta classificacao?'),
+                            actions: <Widget>[
+                              TextButton(
+                                  child: const Text('Sim'),
+                                  onPressed: () async {
+                                    String status =
+                                        (await dbhelper.removerClassificao(
+                                            classificacoes[index])) as String;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(status)));
+                                    Navigator.of(context).pop(true);
+                                    carregaLista();
+                                  }),
+                              TextButton(
+                                  child: const Text('Não'),
+                                  onPressed: () {
+                                    carregaLista();
+                                    Navigator.of(context).pop(false);
+                                  }),
+                            ],
+                          );
+                        });
+                  },*/
+                  ,
                   child: Card(
                     color: Colors.white,
                     elevation: 2.0,
@@ -147,7 +157,7 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
           showDialog(
             context: context,
             builder: (BuildContext context) => dialog.buildDialog(
-                context, ClassificacaoModel(id: 0, descricao: ''), true),
+                context, Classificacao(id: 0, descricao: ''), true),
           );
         },
         child: Icon(Icons.add),
@@ -162,7 +172,7 @@ class ClassificacaoDialog {
   late var txtPrioridade = TextEditingController();
 
   Widget buildDialog(
-      BuildContext context, ClassificacaoModel classificacao, bool isNew) {
+      BuildContext context, Classificacao classificacao, bool isNew) {
     DbHelper helper = DbHelper();
 
     if (!isNew) {

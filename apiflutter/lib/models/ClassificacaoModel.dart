@@ -1,8 +1,8 @@
-class ClassificacaoModel {
+class Classificacao {
   int id;
   String descricao;
 
-  ClassificacaoModel(
+  Classificacao(
       {required this.id,
       required this.descricao,
       });

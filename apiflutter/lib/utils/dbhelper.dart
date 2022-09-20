@@ -80,7 +80,7 @@ class DbHelper {
     print(conselho.first.toString());
   }
 
-  Future<int> insertClassificacao(ClassificacaoModel classificacao) async {
+  Future<int> insertClassificacao(Classificacao classificacao) async {
     // conflictAlgorithm especifica como o banco deve tratar quando inserimos dados com id duplicados
     // Nesse caso, se a mesma lista for inserida várias vezes, ela substituirá os dados anterior
     int id = await this.db!.insert('classificacao', classificacao.toMap(),
@@ -97,12 +97,12 @@ class DbHelper {
     return id;
   }
 
-  Future<List<ClassificacaoModel>> getClassificacoes() async {
+  Future<List<Classificacao>> getClassificacoes() async {
     final List<Map<String, dynamic>> mapClassificacoes =
         await this.db!.rawQuery('SELECT * FROM classificacao');
 
     return List.generate(mapClassificacoes.length, (index) {
-      return ClassificacaoModel(
+      return Classificacao(
           id: mapClassificacoes[index]['id'],
           descricao: mapClassificacoes[index]['descricao']);
     });
@@ -140,6 +140,13 @@ class DbHelper {
     int result = await this
         .db!
         .delete('conselho', where: 'id = ?', whereArgs: [conselho.id]);
+    return result;
+  }
+
+  Future<int> removerClassificao(Classificacao classificacao) async {
+    int result = await this
+        .db!
+        .delete('classificacao', where: 'id = ?', whereArgs: [classificacao.id]);
     return result;
   }
 }

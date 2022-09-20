@@ -100,7 +100,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 content: const Text(
-                                    'Deseja realmente remover dos favoritos?'),
+                                    'Deseja realmente remover este conselho?'),
                                 actions: <Widget>[
                                   TextButton(
                                       child: const Text('Sim'),
