@@ -31,12 +31,24 @@ class ConselhosMenu extends StatefulWidget {
 
 class _ConselhosMenuState extends State<ConselhosMenu> {
   DbHelper dbhelper = DbHelper();
-  HttpHelper httpHelper = HttpHelper();
+  HttpHelper httphelper = HttpHelper();
   List<Conselho> listas = [];
+  late ClassificacaoDialog dialog;
 
   @override
-  void initState() {
+  initState() {
+    httphelper = new HttpHelper();
+    dbhelper = new DbHelper();
+    dialog = ClassificacaoDialog();
     super.initState();
+  }
+
+  Future initialize() async {
+    listas = await httphelper.getConselho();
+    //  conselhos = await dbhelper.getConselhos(1);
+    setState(() {
+      listas = listas;
+    });
   }
 
   @override
@@ -44,7 +56,6 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
     String conselhoRecuperado = '';
 
     dbhelper.testDb();
-    httpHelper.getConselho();
     return Scaffold(
       appBar: AppBar(
         title: Text("Conselhos Milenares"),
@@ -75,10 +86,77 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
                 child: Text('Classificação'),
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text(conselhoRecuperado))
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => dialog.buildDialog(
+                          context, Classificacao(id: 0, descricao: ''), true),
+                    );
+                  },
+                  child: Text("Novo Conselho!")),
+            )
           ],
         ),
       ),
+    );
+  }
+}
+
+class ClassificacaoDialog {
+  late var txtDescricao = TextEditingController();
+  late var txtPrioridade = TextEditingController();
+
+  Widget buildDialog(
+      BuildContext context, Classificacao classificacao, bool isNew) {
+    DbHelper dbhelper = DbHelper();
+    HttpHelper httphelper = HttpHelper();
+    List<Conselho> conselho = [];
+
+    Future geraConselho() async {
+      conselho = await httphelper.getConselho();
+    }
+
+    if (!isNew) {
+      txtDescricao = TextEditingController(text: classificacao.descricao);
+    }
+    geraConselho();
+    return AlertDialog(
+      title: Text((isNew) ? "Nova Classificacao" : "Alterar Classificacao"),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(conselho[0].conselho),
+            Row(children: [
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    classificacao.descricao = txtDescricao.text;
+                    dbhelper.insertClassificacao(classificacao);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Salvar Conselho"),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2),
+                child: ElevatedButton(
+                  onPressed: () {
+                    classificacao.descricao = txtDescricao.text;
+                    dbhelper.insertClassificacao(classificacao);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancelar"),
+                ),
+              ),
+            ])
+          ],
+        ),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
     );
   }
 }

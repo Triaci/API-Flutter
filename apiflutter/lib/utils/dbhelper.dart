@@ -25,7 +25,7 @@ class DbHelper {
             CREATE TABLE conselho (
               id INTEGER PRIMARY KEY,
               classificacao INTEGER,
-              texto TEXT,
+              conselho TEXT,
               data DATE,
               comentario TEXT
             )
@@ -90,12 +90,21 @@ class DbHelper {
     return id;
   }
 
-  Future<int> insertConselho(Conselho conselho) async {
+  Future<int> insertConselho(String texto) async {
     int id = await this.db!.insert(
-          'conselho',
-          conselho.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
+        'conselho',
+        {
+          'id': null,
+          'classificacao': 1,
+          'texto': texto,
+          'data': '2000-10-10',
+          'comentario': 'comentario qualquer'
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    List<Map<String, Object?>> conselho = await db!.query('conselho');
+    conselho.forEach((cons) {
+      print(cons.toString());
+    });
     return id;
   }
 
@@ -110,21 +119,18 @@ class DbHelper {
     });
   }
 
-  Future<List<Conselho>> getConselhos(int classificacao) async {
-    final List<Map<String, dynamic>> mapConselhos = await this.db!.query(
-        'conselho',
-        where: 'classificacao = ?',
-        whereArgs: [classificacao]);
-  
+  Future<List<Conselho>> getConselhos() async {
+    final List<Map<String, dynamic>> mapConselhos =
+        await this.db!.query('conselho');
+
     return List.generate(mapConselhos.length, (index) {
       print("entrou no generate");
-      print(index);
       return Conselho(
           id: mapConselhos[index]['id'],
           classificacao: mapConselhos[index]['classificacao'],
-          data: DateTime.parse(mapConselhos[index]['data']), // faz o parse da sua data para um objeto DateTime
+          data: DateTime.parse(mapConselhos[index]
+              ['data']), // faz o parse da sua data para um objeto DateTime
           comentario: mapConselhos[index]['comentario'],
-          //conselho: mapConselhos[index]['conselho']); não existe em sua tabela conselho uma coluna chamada conselho
           conselho: mapConselhos[index]['texto']);
     });
   }
@@ -147,13 +153,11 @@ class DbHelper {
   }
 
   Future<int> removerClassificao(Classificacao classificacao) async {
-    int result = await this
-        .db!
-        .delete('classificacao', where: 'id = ?', whereArgs: [classificacao.id]);
+    int result = await this.db!.delete('classificacao',
+        where: 'id = ?', whereArgs: [classificacao.id]);
     return result;
   }
 
-  
   Future<int> removerConselho(Conselho conselho) async {
     int result = await this
         .db!

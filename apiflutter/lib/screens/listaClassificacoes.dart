@@ -40,6 +40,7 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
 
     classificacoes = await dbhelper.getClassificacoes();
     setState(() {
+      classcount = classificacoes.length;
       classificacoes = classificacoes;
     });
   }
@@ -98,10 +99,11 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
 //                  }
                 return Dismissible(
                   key: Key(classificacoes[index].id.toString()),
-                  onDismissed: (direction) async {
+                  confirmDismiss: (direction) async {
                     //carregaLista();
                     if (direction == DismissDirection.endToStart) {
                       await dbhelper.removerClassificao(classificacoes[index]);
+                      carregaLista();
                     }
                     if (direction == DismissDirection.startToEnd) {
                       print("Start to End");

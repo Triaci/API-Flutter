@@ -25,25 +25,35 @@ class _ListaConselhosState extends State<ListaConselhos> {
   void initState() {
     httphelper = new HttpHelper();
     dbhelper = new DbHelper();
-    carregaConselhos();
+    // carregaConselhosBanco();
     initialize();
     super.initState();
     // result = '';
   }
 
-  Future carregaConselhos() async {
+  Future carregaConselhosBanco() async {
     await dbhelper.openDb();
 
-    conselhos = await dbhelper.getConselhos(1);
+    conselhos = await dbhelper.getConselhos();
+    // print(conselhos[1].conselho);
     //dataString = DateFormat("yyyy-MM-dd hh:mm:ss").format(conselhos[1].data);
+    setState(() {
+      conselhosCount = conselhos.length;
+      conselhos = conselhos;
+    });
+  }
+
+  Future carregaConselhosHttp() async {
+    conselhos = await httphelper.getConselho();
     setState(() {
       conselhos = conselhos;
     });
   }
 
   Future initialize() async {
-    // Aqui alimenta com o http conselhos = await httphelper.getConselho();
-    conselhos = await httphelper.getConselho();
+   // conselhos = await httphelper.getConselho();
+    conselhos = await dbhelper.getConselhos();
+
     setState(() {
       conselhosCount = conselhos.length;
       conselhos = conselhos;
@@ -53,7 +63,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    //carregaConselhos();
+    //carregaConselhosHttp();
     return Scaffold(
         appBar: AppBar(
           title: searchBar,
@@ -96,40 +106,46 @@ class _ListaConselhosState extends State<ListaConselhos> {
                   return Dismissible(
                       key: Key(conselhos[index].id.toString()),
                       confirmDismiss: (direction) async {
-                        if (direction == DismissDirection.endToStart) {}
-                        return await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: const Text(
-                                    'Deseja realmente remover este conselho?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                      child: const Text('Sim'),
-                                      onPressed: () async {
-                                        String status =
-                                            (await dbhelper.removerConselho(
-                                                conselhos[index])) as String;
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(status)));
-                                        Navigator.of(context).pop(true);
-                                      }),
-                                  TextButton(
-                                    child: const Text('Não'),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                  ),
-                                ],
-                              );
-                            });
+                        if (direction == DismissDirection.endToStart) {
+                          await dbhelper
+                              .insertConselho(conselhos[index].conselho);
+                         // conselhos = await dbhelper.getConselhos();
+                          carregaConselhosBanco();
+                        } else {
+                          return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: const Text(
+                                      'Deseja realmente remover este conselho?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        child: const Text('Sim'),
+                                        onPressed: () async {
+                                          String status =
+                                              (await dbhelper.removerConselho(
+                                                  conselhos[index])) as String;
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(status)));
+                                          Navigator.of(context).pop(true);
+                                        }),
+                                    TextButton(
+                                      child: const Text('Não'),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                    ),
+                                  ],
+                                );
+                              });
+                        }
                       },
                       child: Card(
                         color: Colors.white,
                         elevation: 2.0,
                         child: ListTile(
                           onTap: () {
-                            dbhelper.insertConselho(conselhos[index]);
+                            dbhelper.insertConselho(conselhos[index].conselho);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
