@@ -25,6 +25,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   void initState() {
     httphelper = new HttpHelper();
     dbhelper = new DbHelper();
+    carregaConselhos();
     initialize();
     super.initState();
     // result = '';
