@@ -2,7 +2,7 @@ class Conselho {
   late int id;
   late int classificacao;
   late String conselho;
-  late String data;
+  late DateTime data;
   late String comentario;
 
   Conselho( 

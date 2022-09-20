@@ -51,7 +51,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    carregaConselhos();
+    //carregaConselhos();
     return Scaffold(
         appBar: AppBar(
           title: searchBar,

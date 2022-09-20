@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 class HttpHelper {
 
+
+
   Future<List<Conselho>> getConselho() async {
     Uri uri = new Uri(
       scheme: 'https',
@@ -17,7 +19,7 @@ class HttpHelper {
 
     if (response.statusCode == HttpStatus.ok) {
       final json = jsonDecode(response.body);
-      final conselhosMap = json['slip'] as List;
+      final conselhosMap = json['slip'];
 
       // *** esse endpoint retorna somente um conselho, por isso, não há necessidade de atribuir isso a uma lista
       // final conselhosMap = json['slip'] as List;
