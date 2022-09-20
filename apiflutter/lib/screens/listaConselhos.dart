@@ -41,6 +41,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   }
 
   Future initialize() async {
+    // Aqui alimenta com o http conselhos = await httphelper.getConselho();
     conselhos = await httphelper.getConselho();
     setState(() {
       conselhosCount = conselhos.length;
@@ -105,11 +106,12 @@ class _ListaConselhosState extends State<ListaConselhos> {
                                   TextButton(
                                       child: const Text('Sim'),
                                       onPressed: () async {
-                                        //String status = await dbhelper
-                                        //    .removerFavoritos(filmes[index].id);
+                                        String status =
+                                            (await dbhelper.removerConselho(
+                                                conselhos[index])) as String;
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                                content: Text("teste")));
+                                                content: Text(status)));
                                         Navigator.of(context).pop(true);
                                       }),
                                   TextButton(

@@ -149,4 +149,12 @@ class DbHelper {
         .delete('classificacao', where: 'id = ?', whereArgs: [classificacao.id]);
     return result;
   }
+
+  
+  Future<int> removerConselho(Conselho conselho) async {
+    int result = await this
+        .db!
+        .delete('conselho', where: 'id = ?', whereArgs: [conselho.id]);
+    return result;
+  }
 }
