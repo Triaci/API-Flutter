@@ -57,6 +57,8 @@ class DbHelper {
       o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
       de inseri-las novamente
     */
+    db!.delete('classificacao'); // pra evitar que o banco fique com lixo
+    db!.delete('conselho'); // pra evitar que o banco fique com lixo
     db!.insert('classificacao', {'id': 1, 'descricao': "Conselhos bons"},
         conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -113,16 +115,17 @@ class DbHelper {
         'conselho',
         where: 'classificacao = ?',
         whereArgs: [classificacao]);
-
+  
     return List.generate(mapConselhos.length, (index) {
       print("entrou no generate");
       print(index);
       return Conselho(
           id: mapConselhos[index]['id'],
           classificacao: mapConselhos[index]['classificacao'],
-          data: mapConselhos[index]['data'],
+          data: DateTime.parse(mapConselhos[index]['data']), // faz o parse da sua data para um objeto DateTime
           comentario: mapConselhos[index]['comentario'],
-          conselho: mapConselhos[index]['conselho']);
+          //conselho: mapConselhos[index]['conselho']); não existe em sua tabela conselho uma coluna chamada conselho
+          conselho: mapConselhos[index]['texto']);
     });
   }
 
