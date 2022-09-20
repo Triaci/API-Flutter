@@ -96,18 +96,21 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
                 //       } else {
                 //  image = NetworkImage(defaultPoster);
 //                  }
-                return Card(
-                  color: Colors.white,
-                  elevation: 2.0,
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => viewConselho()));
-                    },
-                    title: Text(classificacoes[index].descricao),
-                    // subtitle:
-                    //   Text('Comentario: ' + conselhos[index].comentario),
-                    //leading: CircleAvatar(),
+                return Dismissible(
+                  key: Key(classificacoes[index].id.toString()),
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 2.0,
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => viewConselho()));
+                      },
+                      title: Text(classificacoes[index].descricao),
+                      // subtitle:
+                      //   Text('Comentario: ' + conselhos[index].comentario),
+                      //leading: CircleAvatar(),
+                    ),
                   ),
                 );
               }))),
