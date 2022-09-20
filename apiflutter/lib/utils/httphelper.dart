@@ -5,15 +5,8 @@ import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:http/http.dart' as http;
 
 class HttpHelper {
-<<<<<<< Updated upstream
-  Future getConselho() async {
-=======
-
-
-
 
   Future<List<Conselho>> getConselho() async {
->>>>>>> Stashed changes
     Uri uri = new Uri(
       scheme: 'https',
       host: 'api.adviceslip.com',
@@ -26,11 +19,6 @@ class HttpHelper {
       final json = jsonDecode(response.body);
       final conselhosMap = json['slip'] as List;
 
-<<<<<<< Updated upstream
-      Map<dynamic, List<Conselho>> conselhos =
-          conselhosMap.map((data) => Conselho.fromJson(data))
-              as Map<dynamic, List<Conselho>>;
-=======
       // *** esse endpoint retorna somente um conselho, por isso, não há necessidade de atribuir isso a uma lista
       // final conselhosMap = json['slip'] as List;
       // Map<dynamic ,List<Conselho>> conselhos =
@@ -43,7 +31,7 @@ class HttpHelper {
       conselhos.forEach((adv) {
         print(adv.conselho);
       });
->>>>>>> Stashed changes
+
 
       return conselhos;
     } else {

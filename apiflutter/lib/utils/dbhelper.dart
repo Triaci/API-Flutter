@@ -48,16 +48,7 @@ class DbHelper {
   // verificar se podemos fazer a inserção com o inser e com o sql padrão
   Future testDb() async {
     db = await openDb();
-<<<<<<< Updated upstream
-    db!.execute("INSERT INTO classificacao VALUES (0 ,'Conselhos Bons')");
-    db!.insert('conselho', {
-      'id': 0,
-      'classificacao': 0,
-      'texto': 'teste do banco',
-      'data': '10/10/2000',
-      'comentario': 'comentario qualquer'
-    });
-=======
+
     // db!.execute("INSERT INTO classificacao VALUES (0, 'Conselhos Bons')");
 
     /* 
@@ -79,7 +70,6 @@ class DbHelper {
           'comentario': 'comentario qualquer'
         },
         conflictAlgorithm: ConflictAlgorithm.replace);
->>>>>>> Stashed changes
 
     List classificacao = await db!.rawQuery('SELECT * FROM classificacao');
     // List items = await db.

@@ -45,12 +45,6 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
 
     dbhelper.testDb();
     httpHelper.getConselho();
-    
-<<<<<<< Updated upstream
-=======
-    listas;
->>>>>>> Stashed changes
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Conselhos Milenares"),
