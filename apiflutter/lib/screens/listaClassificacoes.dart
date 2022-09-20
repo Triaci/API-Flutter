@@ -98,6 +98,34 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
 //                  }
                 return Dismissible(
                   key: Key(classificacoes[index].id.toString()),
+                  onDismissed: (direction) async {
+                        if (direction == DismissDirection.endToStart) {}
+                        return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: const Text(
+                                    'Deseja realmente remover esta classificacao?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                      child: const Text('Sim'),
+                                      onPressed: () async {
+                                        //String status = await dbhelper
+                                        //    .removerFavoritos(filmes[index].id);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text("teste")));
+                                        Navigator.of(context).pop(true);
+                                      }),
+                                  TextButton(
+                                    child: const Text('Não'),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
                   child: Card(
                     color: Colors.white,
                     elevation: 2.0,
