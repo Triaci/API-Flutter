@@ -2,10 +2,10 @@ class Conselho {
   late int id;
   late int classificacao;
   late String conselho;
-  late DateTime data;
+  late String data;
   late String comentario;
 
-  Conselho(
+  Conselho( 
       { required this.id,
        required this.classificacao,
        required this.conselho,
@@ -22,7 +22,7 @@ class Conselho {
       'id': (id == 0) ? null : id, // definimos como 0, para que o sqlite incremente automaticamente
       'classificacao': classificacao,
       'conselho': conselho,
-      'data' : data,
+      'data' : data ,
       'comentario': comentario
     };
   }    

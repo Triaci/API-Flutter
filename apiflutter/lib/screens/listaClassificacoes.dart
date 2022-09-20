@@ -27,16 +27,27 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
   int classcount = 0;
   @override
   void initState() {
-    //helper = new HttpHelper();
+    httphelper = new HttpHelper();
+    dbhelper = new DbHelper();
     dialog = ClassificacaoDialog();
     initialize();
     super.initState();
     // result = '';
   }
 
+  Future carregaLista() async {
+    await dbhelper.openDb();
+
+    classificacoes = await dbhelper.getClassificacoes();
+    setState(() {
+      classificacoes = classificacoes;
+    });
+  }
+
   Future initialize() async {
     //conselhos = await helper.getLancamentos();
     setState(() async {
+      classificacoes = await dbhelper.getClassificacoes();
       classcount = classificacoes.length;
       classificacoes = classificacoes;
       ;
@@ -46,6 +57,7 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    carregaLista();
     return Scaffold(
       appBar: AppBar(
         title: searchBar,

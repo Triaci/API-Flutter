@@ -1,7 +1,7 @@
 import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:apiflutter/screens/viewConselho.dart';
+import 'package:apiflutter/utils/dbhelper.dart';
 import 'package:flutter/material.dart';
-
 import '../utils/httphelper.dart';
 
 class ListaConselhos extends StatefulWidget {
@@ -12,7 +12,9 @@ class ListaConselhos extends StatefulWidget {
 class _ListaConselhosState extends State<ListaConselhos> {
   late String result;
   late HttpHelper httphelper;
+  late DbHelper dbhelper;
 
+  String dataString = '';
   int conselhosCount = 0;
   List<Conselho> conselhos = [];
 
@@ -22,9 +24,20 @@ class _ListaConselhosState extends State<ListaConselhos> {
   @override
   void initState() {
     httphelper = new HttpHelper();
+    dbhelper = new DbHelper();
     initialize();
     super.initState();
     // result = '';
+  }
+
+  Future carregaConselhos() async {
+    await dbhelper.openDb();
+
+    conselhos = await dbhelper.getConselhos(1);
+    //dataString = DateFormat("yyyy-MM-dd hh:mm:ss").format(conselhos[1].data);
+    setState(() {
+      conselhos = conselhos;
+    });
   }
 
   Future initialize() async {
@@ -38,6 +51,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    carregaConselhos();
     return Scaffold(
         appBar: AppBar(
           title: searchBar,
@@ -68,7 +82,8 @@ class _ListaConselhosState extends State<ListaConselhos> {
         ),
         body: Container(
             child: ListView.builder(
-                itemCount: (this.conselhosCount == null) ? 0 : this.conselhosCount,
+                itemCount:
+                    (this.conselhosCount == null) ? 0 : this.conselhosCount,
                 itemBuilder: ((BuildContext context, int index) {
                   //       if (conselhos[index].posterPath != null) {
                   //image =
@@ -76,21 +91,52 @@ class _ListaConselhosState extends State<ListaConselhos> {
                   //       } else {
                   //  image = NetworkImage(defaultPoster);
 //                  }
-                  print(index.toString() + "index do conselho");
-                  return Card(
-                    color: Colors.white,
-                    elevation: 2.0,
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => viewConselho()));
+                  return Dismissible(
+                      key: Key(conselhos[index].id.toString()),
+                      confirmDismiss: (direction) async {
+                        if (direction == DismissDirection.endToStart) {}
+                        return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: const Text(
+                                    'Deseja realmente remover dos favoritos?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                      child: const Text('Sim'),
+                                      onPressed: () async {
+                                        //String status = await dbhelper
+                                        //    .removerFavoritos(filmes[index].id);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text("teste")));
+                                        Navigator.of(context).pop(true);
+                                      }),
+                                  TextButton(
+                                    child: const Text('Não'),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                  ),
+                                ],
+                              );
+                            });
                       },
-                      title: Text(conselhos[index].conselho),
-                      subtitle:
-                          Text('Comentario: ' + conselhos[index].comentario),
-                      leading: CircleAvatar(),
-                    ),
-                  );
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 2.0,
+                        child: ListTile(
+                          onTap: () {
+                            dbhelper.insertConselho(conselhos[index]);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => viewConselho()));
+                          },
+                          title: Text(conselhos[index].conselho),
+                          subtitle: Text('Comentario: '),
+                          leading: CircleAvatar(),
+                        ),
+                      ));
                 }))));
   }
 }

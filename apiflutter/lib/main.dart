@@ -42,12 +42,14 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
   @override
   Widget build(BuildContext context) {
     String conselhoRecuperado = '';
-    // TODO: implement build
-    // print("passou");
+
     dbhelper.testDb();
-    //print("antes do http");
     httpHelper.getConselho();
     
+<<<<<<< Updated upstream
+=======
+    listas;
+>>>>>>> Stashed changes
 
     return Scaffold(
       appBar: AppBar(

@@ -48,6 +48,7 @@ class DbHelper {
   // verificar se podemos fazer a inserção com o inser e com o sql padrão
   Future testDb() async {
     db = await openDb();
+<<<<<<< Updated upstream
     db!.execute("INSERT INTO classificacao VALUES (0 ,'Conselhos Bons')");
     db!.insert('conselho', {
       'id': 0,
@@ -56,6 +57,29 @@ class DbHelper {
       'data': '10/10/2000',
       'comentario': 'comentario qualquer'
     });
+=======
+    // db!.execute("INSERT INTO classificacao VALUES (0, 'Conselhos Bons')");
+
+    /* 
+      a cada execução do seu applicativo, o código acima tentava inserir um classificação com id 0, isso não é possivel
+      pois, não pode-se repetir chave primaria no banco durante a inserção
+      o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
+      de inseri-las novamente
+    */
+    db!.insert('classificacao', {'id': 1, 'descricao': "Conselhos bons"},
+        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    db!.insert(
+        'conselho',
+        {
+          'id': null,
+          'classificacao': 1,
+          'texto': 'teste do banco',
+          'data': '2000-10-10',
+          'comentario': 'comentario qualquer'
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
+>>>>>>> Stashed changes
 
     List classificacao = await db!.rawQuery('SELECT * FROM classificacao');
     // List items = await db.
@@ -95,11 +119,14 @@ class DbHelper {
   }
 
   Future<List<Conselho>> getConselhos(int classificacao) async {
-    final List<Map<String, dynamic>> mapConselhos = await this
-        .db!
-        .query('itens', where: 'classificacao = ?', whereArgs: [classificacao]);
+    final List<Map<String, dynamic>> mapConselhos = await this.db!.query(
+        'conselho',
+        where: 'classificacao = ?',
+        whereArgs: [classificacao]);
 
     return List.generate(mapConselhos.length, (index) {
+      print("entrou no generate");
+      print(index);
       return Conselho(
           id: mapConselhos[index]['id'],
           classificacao: mapConselhos[index]['classificacao'],
