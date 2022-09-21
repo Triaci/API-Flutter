@@ -1,6 +1,7 @@
 import 'package:apiflutter/models/ClassificacaoModel.dart';
 import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -57,8 +58,8 @@ class DbHelper {
       o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
       de inseri-las novamente
     */
-    //db!.delete('classificacao'); // pra evitar que o banco fique com lixo
-    //db!.delete('conselho'); // pra evitar que o banco fique com lixo
+    db!.delete('classificacao'); // pra evitar que o banco fique com lixo
+    db!.delete('conselho'); // pra evitar que o banco fique com lixo
     db!.insert('classificacao', {'id': 0, 'descricao': "Conselhos bons"},
         conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -95,10 +96,10 @@ class DbHelper {
         'conselho',
         {
           'id': null,
-          'classificacao': 1,
+          'classificacao': classificacao,
           'texto': texto,
-          'data': '2000-10-10',
-          'comentario': 'comentario qualquer'
+          'data':  DateFormat('yyyy-MM-dd').format(data),
+          'comentario': comentario
         },
         conflictAlgorithm: ConflictAlgorithm.replace);
     List<Map<String, Object?>> conselho = await db!.query('conselho');

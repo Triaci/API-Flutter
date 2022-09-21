@@ -51,7 +51,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   }
 
   Future initialize() async {
-   // conselhos = await httphelper.getConselho();
+    // conselhos = await httphelper.getConselho();
     conselhos = await dbhelper.getConselhos();
 
     setState(() {
@@ -106,39 +106,35 @@ class _ListaConselhosState extends State<ListaConselhos> {
                   return Dismissible(
                       key: Key(conselhos[index].id.toString()),
                       confirmDismiss: (direction) async {
-                        if (direction == DismissDirection.endToStart) {
-                         // await dbhelper
-                           //   .insertConselho(conselhos[index].conselho);
-                          conselhos = await dbhelper.getConselhos();
-                          carregaConselhosBanco();
-                        } else {
-                          return await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: const Text(
-                                      'Deseja realmente remover este conselho?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        child: const Text('Sim'),
-                                        onPressed: () async {
-                                          String status =
-                                              (await dbhelper.removerConselho(
-                                                  conselhos[index])) as String;
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(status)));
-                                          Navigator.of(context).pop(true);
-                                        }),
-                                    TextButton(
-                                      child: const Text('Não'),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(false),
-                                    ),
-                                  ],
-                                );
-                              });
-                        }
+                        // await dbhelper
+                        //   .insertConselho(conselhos[index].conselho);
+                        conselhos = await dbhelper.getConselhos();
+                        carregaConselhosBanco();
+
+                        return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: const Text(
+                                    'Deseja realmente remover este conselho?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                      child: const Text('Sim'),
+                                      onPressed: () async {
+                                        Navigator.of(context).pop(false);
+                                        await dbhelper
+                                            .removerConselho(conselhos[index]);
+
+                                        carregaConselhosBanco();
+                                      }),
+                                  TextButton(
+                                    child: const Text('Não'),
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                  ),
+                                ],
+                              );
+                            });
                       },
                       child: Card(
                         color: Colors.white,
@@ -152,7 +148,8 @@ class _ListaConselhosState extends State<ListaConselhos> {
                                     builder: (_) => viewConselho()));
                           },
                           title: Text(conselhos[index].conselho),
-                          subtitle: Text('Comentario: '),
+                          subtitle: Text(
+                              'Comentario: ' + conselhos[index].comentario),
                           leading: CircleAvatar(),
                         ),
                       ));

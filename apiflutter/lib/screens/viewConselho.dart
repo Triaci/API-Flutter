@@ -7,6 +7,7 @@ import 'package:apiflutter/screens/viewConselho.dart';
 import 'package:apiflutter/utils/dbhelper.dart';
 import 'package:apiflutter/utils/httphelper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class viewConselho extends StatefulWidget {
@@ -38,8 +39,8 @@ class _viewConselhoState extends State<viewConselho> {
   Future recebeConselho() async {
     conselhos = await httphelper.getConselho();
     classificacoes = await dbHelper.getClassificacoes();
-
-    setState(() async {
+    //conselho = conselhos.first.conselho;
+    setState(() {
       conselho = conselho;
     });
   }
@@ -50,7 +51,7 @@ class _viewConselhoState extends State<viewConselho> {
     dropDownValue = classificacoes.first.id.toString();
     conselho = conselhos.first.conselho;
     classificacoes.forEach((classi) {
-      idClass.add(classi.id.toString());
+    idClass.add(classi.id.toString());
     });
     setState(() {
       conselho = conselho;
@@ -167,8 +168,9 @@ class _viewConselhoState extends State<viewConselho> {
                       controller: comentario,
                     ),
                     decoration: new BoxDecoration(
-                        color: Colors.amber[300],
-                        borderRadius: BorderRadius.all(Radius.circular(40))),
+                      color: Colors.amber[300],
+                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                    ),
                   ),
                 ),
                 Center(
@@ -176,6 +178,11 @@ class _viewConselhoState extends State<viewConselho> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlinedButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0))),
+                        ),
                         onPressed: () async {
                           DateTime? newData = await showDatePicker(
                               context: context,
@@ -183,19 +190,34 @@ class _viewConselhoState extends State<viewConselho> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2050));
 
-                          if (newData == null) return;
-                          setState(() {
-                            dataConselho = newData;
-                          });
+                          if (newData == null) {
+                            return;
+                          } else {
+                            setState(() {
+                              dataConselho = newData;
+                            });
+                          }
                         },
                         child: const Text('Selecione a Data'),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          data = DateFormat('yyyy-MM-dd').format(dataConselho)),
-                    )
+                    Center(
+                        child: Container(
+                            decoration: new BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40)),
+                              color: Colors.greenAccent.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                DateFormat("dd/MM/yyyy").format(dataConselho),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 15),
+                              ),
+                            )))
                   ]),
                 ),
                 Row(

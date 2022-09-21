@@ -61,42 +61,92 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
       appBar: AppBar(
         title: Text("Conselhos Milenares"),
       ),
+      backgroundColor: Colors.grey.shade300,
       body: Center(
-        child: Column(
-          children: [
-            Padding(
+        child: Container(
+          child: Column(
+            children: [
+              Padding(
+                  padding: const EdgeInsetsDirectional.all(30),
+                  child: ClipRRect(
+                      child: Image.asset('assets/images/pensador.png',
+                          height: 270),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(400)))),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Colors.cyanAccent.shade400),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                    side: BorderSide(color: Colors.white)))),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => viewConselho()));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        "Novo Conselho!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30),
+                      ),
+                    )),
+              ),
+              Padding(
                 padding: EdgeInsetsDirectional.all(10),
-                child: Image.asset('assets/images/socrates.jpg', height: 350)),
-            Padding(
-              padding: EdgeInsetsDirectional.all(10),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ListaConselhos()));
-                },
-                child: Text('Conselhos'),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => ListaClassificacoes()));
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Colors.purpleAccent.shade400),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                              side: BorderSide(color: Colors.white)))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text('Classificação',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 30)),
+                  ),
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.all(10),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => ListaClassificacoes()));
-                },
-                child: Text('Classificação'),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: ElevatedButton(
+              Padding(
+                padding: EdgeInsetsDirectional.all(10),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Colors.greenAccent.shade400),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                              side: BorderSide(color: Colors.white)))),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => viewConselho()));
+                        MaterialPageRoute(builder: (_) => ListaConselhos()));
                   },
-                  child: Text("Novo Conselho!")),
-            )
-          ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Meus Conselhos',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
