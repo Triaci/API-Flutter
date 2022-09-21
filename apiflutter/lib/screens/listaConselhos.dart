@@ -2,6 +2,7 @@ import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:apiflutter/screens/viewConselho.dart';
 import 'package:apiflutter/utils/dbhelper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../utils/httphelper.dart';
 
 class ListaConselhos extends StatefulWidget {
@@ -30,6 +31,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
     super.initState();
     // result = '';
   }
+  
 
   Future carregaConselhosBanco() async {
     await dbhelper.openDb();
@@ -66,31 +68,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
     //carregaConselhosHttp();
     return Scaffold(
         appBar: AppBar(
-          title: searchBar,
-          actions: [
-            IconButton(
-                icon: iconeSearchBar,
-                onPressed: () {
-                  setState(() {
-                    if (this.iconeSearchBar.icon == Icons.search) {
-                      this.iconeSearchBar = Icon(Icons.cancel);
-                      this.searchBar = TextField(
-                        autofocus: true,
-                        textInputAction: TextInputAction.search,
-                        style: TextStyle(color: Colors.white, fontSize: 20.0),
-                        onSubmitted: (String titulo) {
-                          //search(titulo);
-                        },
-                      );
-                    } else {
-                      this.setState(() {
-                        this.iconeSearchBar = Icon(Icons.search);
-                        this.searchBar = Text('Lista de Conselhos');
-                      });
-                    }
-                  });
-                }),
-          ],
+          title: Text("Conselhos"),
         ),
         body: Container(
             child: ListView.builder(
@@ -140,19 +118,14 @@ class _ListaConselhosState extends State<ListaConselhos> {
                         color: Colors.white,
                         elevation: 2.0,
                         child: ListTile(
-                          onTap: () {
-                            //dbhelper.insertConselho(conselhos[index].conselho);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => viewConselho()));
-                          },
+                          
                           title: Text(conselhos[index].conselho),
                           subtitle: Text(
-                              'Comentario: ' + conselhos[index].comentario),
-                          leading: CircleAvatar(),
+                              'Comentario: ' + conselhos[index].comentario + "\n" + DateFormat("dd/MM/yyyy").format(conselhos[index].data)),
+                          leading: CircleAvatar(child: Text(conselhos[index].classificacao.toString()),
+                          backgroundColor: Colors.amber
                         ),
-                      ));
+                      )));
                 }))));
   }
 }
