@@ -107,9 +107,9 @@ class _ListaConselhosState extends State<ListaConselhos> {
                       key: Key(conselhos[index].id.toString()),
                       confirmDismiss: (direction) async {
                         if (direction == DismissDirection.endToStart) {
-                          await dbhelper
-                              .insertConselho(conselhos[index].conselho);
-                         // conselhos = await dbhelper.getConselhos();
+                         // await dbhelper
+                           //   .insertConselho(conselhos[index].conselho);
+                          conselhos = await dbhelper.getConselhos();
                           carregaConselhosBanco();
                         } else {
                           return await showDialog(
@@ -145,7 +145,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
                         elevation: 2.0,
                         child: ListTile(
                           onTap: () {
-                            dbhelper.insertConselho(conselhos[index].conselho);
+                            //dbhelper.insertConselho(conselhos[index].conselho);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

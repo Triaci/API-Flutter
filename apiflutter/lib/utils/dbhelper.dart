@@ -57,9 +57,9 @@ class DbHelper {
       o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
       de inseri-las novamente
     */
-    db!.delete('classificacao'); // pra evitar que o banco fique com lixo
-    db!.delete('conselho'); // pra evitar que o banco fique com lixo
-    db!.insert('classificacao', {'id': 1, 'descricao': "Conselhos bons"},
+    //db!.delete('classificacao'); // pra evitar que o banco fique com lixo
+    //db!.delete('conselho'); // pra evitar que o banco fique com lixo
+    db!.insert('classificacao', {'id': 0, 'descricao': "Conselhos bons"},
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     db!.insert(
@@ -90,7 +90,7 @@ class DbHelper {
     return id;
   }
 
-  Future<int> insertConselho(String texto) async {
+  Future<int> insertConselho(int classificacao,String texto, DateTime data, String comentario) async {
     int id = await this.db!.insert(
         'conselho',
         {
@@ -112,6 +112,7 @@ class DbHelper {
     final List<Map<String, dynamic>> mapClassificacoes =
         await this.db!.rawQuery('SELECT * FROM classificacao');
 
+   
     return List.generate(mapClassificacoes.length, (index) {
       return Classificacao(
           id: mapClassificacoes[index]['id'],
