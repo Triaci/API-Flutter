@@ -102,7 +102,6 @@ class _ListaConselhosState extends State<ListaConselhos> {
                                         Navigator.of(context).pop(false);
                                         await dbhelper
                                             .removerConselho(conselhos[index]);
-
                                         carregaConselhosBanco();
                                       }),
                                   TextButton(

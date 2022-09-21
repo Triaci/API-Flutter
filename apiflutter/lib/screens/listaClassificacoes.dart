@@ -17,11 +17,6 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
   late ClassificacaoDialog dialog;
 
   List<Classificacao> classificacoes = [];
-
-  //final String defaultPathImage = 'https://image.tmdb.org/t/p/w92/';
-  //final String defaultPoster =
-  //  'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
-
   Icon iconeSearchBar = Icon(Icons.search);
   Widget searchBar = Text('Classificacoes');
   int classcount = 0;
@@ -91,12 +86,6 @@ class _ListaClassificacoesState extends State<ListaClassificacoes> {
           child: ListView.builder(
               itemCount: (this.classcount == null) ? 0 : this.classcount,
               itemBuilder: ((BuildContext context, int index) {
-                //       if (conselhos[index].posterPath != null) {
-                //image =
-                //  NetworkImage(defaultPathImage + filmes[index].posterPath);
-                //       } else {
-                //  image = NetworkImage(defaultPoster);
-//                  }
                 return Dismissible(
                   key: Key(classificacoes[index].id.toString()),
                   confirmDismiss: (direction) async {

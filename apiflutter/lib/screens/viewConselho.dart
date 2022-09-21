@@ -31,6 +31,7 @@ class _viewConselhoState extends State<viewConselho> {
   void initState() {
     httphelper = new HttpHelper();
     dbHelper = new DbHelper();
+    print('passsa aqui');
     initialize();
     super.initState();
     // result = '';
@@ -39,8 +40,8 @@ class _viewConselhoState extends State<viewConselho> {
   Future recebeConselho() async {
     conselhos = await httphelper.getConselho();
     classificacoes = await dbHelper.getClassificacoes();
-    //conselho = conselhos.first.conselho;
-    setState(() async{
+    conselho = conselhos.first.conselho;
+    setState(() {
       conselho = conselho;
     });
   }
@@ -48,11 +49,14 @@ class _viewConselhoState extends State<viewConselho> {
   Future initialize() async {
     conselhos = await httphelper.getConselho();
     classificacoes = await dbHelper.getClassificacoes();
+
     dropDownValue = classificacoes.first.id.toString();
     conselho = conselhos.first.conselho;
+    print(conselho);
     classificacoes.forEach((classi) {
-    idClass.add(classi.id.toString());
+      idClass.add(classi.id.toString());
     });
+    print(idClass);
     setState(() {
       conselho = conselho;
       classificacoes = classificacoes;
@@ -63,6 +67,8 @@ class _viewConselhoState extends State<viewConselho> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
+    print('fodae');
     recebeConselho();
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +104,8 @@ class _viewConselhoState extends State<viewConselho> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(conselho,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       decoration: new BoxDecoration(
                           color: Colors.white,
@@ -190,7 +197,7 @@ class _viewConselhoState extends State<viewConselho> {
                                 initialDate: dataConselho,
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2050));
-      
+
                             if (newData == null) {
                               return;
                             } else {

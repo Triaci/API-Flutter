@@ -24,7 +24,7 @@ class DbHelper {
           onCreate: (database, version) {
         database.execute('''
             CREATE TABLE conselho (
-              id INTEGER PRIMARY KEY,
+              id INTEGER PRIMARY KEY ,
               classificacao INTEGER,
               conselho TEXT,
               data DATE,
@@ -33,7 +33,7 @@ class DbHelper {
           ''');
         database.execute('''
             CREATE TABLE classificacao (
-              id INTEGER PRIMARY KEY,
+              id INTEGER PRIMARY KEY ,
               descricao TEXT
             )
           ''');
@@ -58,19 +58,20 @@ class DbHelper {
       o autoincrement na criação da tabela ajuda a resolver isso, e também, o conflict algorithm, que vai atualizar as infos no banco ao invés
       de inseri-las novamente
     */
-    db!.delete('classificacao'); // pra evitar que o banco fique com lixo
-    db!.delete('conselho'); // pra evitar que o banco fique com lixo
+    //db!.delete('classificacao'); // pra evitar que o banco fique com lixo
+    //db!.delete('conselho'); // pra evitar que o banco fique com lixo
     db!.insert('classificacao', {'id': 0, 'descricao': "Conselhos bons"},
         conflictAlgorithm: ConflictAlgorithm.replace);
-
+  //  db!.insert('classificacao', {'id': 0, 'descricao': "Conselhos Ruins"},
+  //    conflictAlgorithm: ConflictAlgorithm.replace);
     db!.insert(
         'conselho',
         {
           'id': null,
           'classificacao': 1,
-          'texto': 'teste do banco',
+          'texto': 'Dê um abraço na sua mãe',
           'data': '2000-10-10',
-          'comentario': 'comentario qualquer'
+          'comentario': 'Pais e avós deveriam ser eternos'
         },
         conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -91,14 +92,15 @@ class DbHelper {
     return id;
   }
 
-  Future<int> insertConselho(int classificacao,String texto, DateTime data, String comentario) async {
+  Future<int> insertConselho(
+      int classificacao, String texto, DateTime data, String comentario) async {
     int id = await this.db!.insert(
         'conselho',
         {
           'id': null,
           'classificacao': classificacao,
           'texto': texto,
-          'data':  DateFormat('yyyy-MM-dd').format(data),
+          'data': DateFormat('yyyy-MM-dd').format(data),
           'comentario': comentario
         },
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -113,7 +115,6 @@ class DbHelper {
     final List<Map<String, dynamic>> mapClassificacoes =
         await this.db!.rawQuery('SELECT * FROM classificacao');
 
-   
     return List.generate(mapClassificacoes.length, (index) {
       return Classificacao(
           id: mapClassificacoes[index]['id'],
@@ -157,6 +158,8 @@ class DbHelper {
   Future<int> removerClassificao(Classificacao classificacao) async {
     int result = await this.db!.delete('classificacao',
         where: 'id = ?', whereArgs: [classificacao.id]);
+    result = await this.db!.delete('conselho',
+        where: 'classificacao = ?', whereArgs: [classificacao.id]);
     return result;
   }
 

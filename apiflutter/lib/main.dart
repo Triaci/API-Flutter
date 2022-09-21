@@ -45,10 +45,10 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
   }
 
   Future initialize() async {
-    listas = await httphelper.getConselho();
+//    listas = await httphelper.getConselho();
     //  conselhos = await dbhelper.getConselhos(1);
     setState(() {
-      listas = listas;
+  //    listas = listas;
     });
   }
 
