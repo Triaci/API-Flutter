@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 
 class HttpHelper {
 
-
-
-  Future<List<Conselho>> getConselho() async {
-    Uri uri = new Uri(
+ Uri uri = new Uri(
       scheme: 'https',
       host: 'api.adviceslip.com',
       path: 'advice',
     );
+
+  Future<List<Conselho>> getConselho() async {
+   
     
     http.Response response = await http.get(uri);
 

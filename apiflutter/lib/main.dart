@@ -2,6 +2,7 @@ import 'package:apiflutter/models/ClassificacaoModel.dart';
 import 'package:apiflutter/models/ConselhoModel.dart';
 import 'package:apiflutter/screens/listaClassificacoes.dart';
 import 'package:apiflutter/screens/listaConselhos.dart';
+import 'package:apiflutter/screens/viewConselho.dart';
 import 'package:apiflutter/utils/httphelper.dart';
 import 'package:flutter/material.dart';
 
@@ -90,11 +91,8 @@ class _ConselhosMenuState extends State<ConselhosMenu> {
               padding: const EdgeInsets.all(10),
               child: ElevatedButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => dialog.buildDialog(
-                          context, Classificacao(id: 0, descricao: ''), true),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => viewConselho()));
                   },
                   child: Text("Novo Conselho!")),
             )
