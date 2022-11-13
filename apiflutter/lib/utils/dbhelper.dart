@@ -62,6 +62,8 @@ class DbHelper {
     db!.delete('conselho'); // pra evitar que o banco fique com lixo
     db!.insert('classificacao', {'id': 0, 'descricao': "Conselhos bons"},
         conflictAlgorithm: ConflictAlgorithm.replace);
+    db!.insert('classificacao', {'id': 1, 'descricao': "Conselhos Ruins"},
+        conflictAlgorithm: ConflictAlgorithm.replace);
 
     db!.insert(
         'conselho',

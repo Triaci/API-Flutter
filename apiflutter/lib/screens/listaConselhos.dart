@@ -31,7 +31,6 @@ class _ListaConselhosState extends State<ListaConselhos> {
     super.initState();
     // result = '';
   }
-  
 
   Future carregaConselhosBanco() async {
     await dbhelper.openDb();
@@ -55,7 +54,7 @@ class _ListaConselhosState extends State<ListaConselhos> {
   Future initialize() async {
     // conselhos = await httphelper.getConselho();
     conselhos = await dbhelper.getConselhos();
-
+    
     setState(() {
       conselhosCount = conselhos.length;
       conselhos = conselhos;
@@ -115,17 +114,20 @@ class _ListaConselhosState extends State<ListaConselhos> {
                             });
                       },
                       child: Card(
-                        color: Colors.white,
-                        elevation: 2.0,
-                        child: ListTile(
-                          
-                          title: Text(conselhos[index].conselho),
-                          subtitle: Text(
-                              'Comentario: ' + conselhos[index].comentario + "\n" + DateFormat("dd/MM/yyyy").format(conselhos[index].data)),
-                          leading: CircleAvatar(child: Text(conselhos[index].classificacao.toString()),
-                          backgroundColor: Colors.amber
-                        ),
-                      )));
+                          color: Colors.white,
+                          elevation: 2.0,
+                          child: ListTile(
+                            title: Text(conselhos[index].conselho),
+                            subtitle: Text('Comentario: ' +
+                                conselhos[index].comentario +
+                                "\n" +
+                                DateFormat("dd/MM/yyyy")
+                                    .format(conselhos[index].data)),
+                            leading: CircleAvatar(
+                                child: Text(
+                                    conselhos[index].classificacao.toString()),
+                                backgroundColor: Colors.amber),
+                          )));
                 }))));
   }
 }

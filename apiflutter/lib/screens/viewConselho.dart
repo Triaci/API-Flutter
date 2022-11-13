@@ -36,11 +36,11 @@ class _viewConselhoState extends State<viewConselho> {
     // result = '';
   }
 
-  Future recebeConselho() async {
+  void recebeConselho() async {
     conselhos = await httphelper.getConselho();
     classificacoes = await dbHelper.getClassificacoes();
     //conselho = conselhos.first.conselho;
-    setState(() async{
+    setState(() async {
       conselho = conselho;
     });
   }
@@ -51,8 +51,9 @@ class _viewConselhoState extends State<viewConselho> {
     dropDownValue = classificacoes.first.id.toString();
     conselho = conselhos.first.conselho;
     classificacoes.forEach((classi) {
-    idClass.add(classi.id.toString());
+      idClass.add(classi.id.toString());
     });
+    print(idClass);
     setState(() {
       conselho = conselho;
       classificacoes = classificacoes;
@@ -98,7 +99,8 @@ class _viewConselhoState extends State<viewConselho> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(conselho,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       decoration: new BoxDecoration(
                           color: Colors.white,
@@ -129,7 +131,7 @@ class _viewConselhoState extends State<viewConselho> {
                                     BorderRadius.all(Radius.circular(40))),
                           ),
                         ),
-                        Padding(
+                        /*Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownButton<String>(
                             value: dropDownValue,
@@ -144,12 +146,12 @@ class _viewConselhoState extends State<viewConselho> {
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(
-                                    classificacoes[int.parse(value)].descricao),
+                                child: Text("teste")
+                                   // classificacoes[int.parse(value)].descricao),
                               );
                             }).toList(),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -190,7 +192,7 @@ class _viewConselhoState extends State<viewConselho> {
                                 initialDate: dataConselho,
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2050));
-      
+
                             if (newData == null) {
                               return;
                             } else {
@@ -247,10 +249,7 @@ class _viewConselhoState extends State<viewConselho> {
                                   MaterialStateProperty.all(Colors.green)),
                           onPressed: () async {
                             await dbHelper.insertConselho(
-                                int.parse(dropDownValue),
-                                conselho,
-                                dataConselho,
-                                comentario.text);
+                                1, conselho, dataConselho, comentario.text);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
