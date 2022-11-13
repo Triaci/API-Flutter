@@ -36,7 +36,8 @@ class _ListaConselhosState extends State<ListaConselhos> {
     await dbhelper.openDb();
 
     conselhos = await dbhelper.getConselhos();
-    // print(conselhos[1].conselho);
+    print("testedsada");
+    print(conselhos[1].comentario);
     //dataString = DateFormat("yyyy-MM-dd hh:mm:ss").format(conselhos[1].data);
     setState(() {
       conselhosCount = conselhos.length;
